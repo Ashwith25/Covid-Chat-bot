@@ -43,17 +43,29 @@ pickle.dump(classes, open('classes.pkl', 'wb'))
 training = []
 output = [0] * len(classes)
 
+# ["hi", "hello", "see", "my", "you"]
+
 for document in documents:
-    bag = []
+    # (["See", "You"], "greeting")
+
+    bag = [] # [0, 0, 1, 0, 1]
     pattern_words = document[0]
     pattern_words = [lemmatizer.lemmatize(w.lower()) for w in pattern_words]
 
     for w in words:
         bag.append(1) if w in pattern_words else bag.append(0)
     
-    output_row = list(output)
-    output_row[classes.index(document[1])] = 1
+    output_row = list(output) # [0, 0` 0, 0, 0, 0, 0, 0]
+    output_row[classes.index(document[1])] = 1 # [0, 0` 0, 0, 0, 0, 0, 0]
     training.append([bag, output_row])
+'''
+[
+    [0, 1, 0, 0, 1], [0, 1, 0, 0, 0]
+    [1, 0, 0, 0, 0], []
+]
+
+'''
+
 
 random.shuffle(training)
 training = np.array(training)
@@ -69,6 +81,7 @@ model.add(Dropout(0.5))
 model.add(Dense(len(train_Y[0]), activation='softmax'))
 
 sgd = SGD(lr=0.01, decay=1e-6, momentum=0.9, nesterov=True)
+
 model.compile(loss='categorical_crossentropy', optimizer=sgd, metrics=['accuracy'])
 
 hist = model.fit(np.array(train_X), np.array(train_Y), epochs=200, batch_size=5, verbose=1)

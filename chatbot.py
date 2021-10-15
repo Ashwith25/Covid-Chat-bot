@@ -16,29 +16,36 @@ classes = pickle.load(open('classes.pkl', 'rb'))
 model = load_model('chatbot_model.h5')
 
 def cleanSentence(sentence):
+    '''
+    Cleans the sentence of punctuation and lemmatizes the words
+    '''
     sentence = sentence.lower()
     sentence = nltk.word_tokenize(sentence)
     sentence = [lemmatizer.lemmatize(word) for word in sentence]
     return sentence
 
 def bagOfWords(sentence):
+    '''
+    Creates a bag of words from the sentence    
+    '''
     sentence = cleanSentence(sentence)
     bag = [0]*len(words)
     for s in sentence:
         for i,w in enumerate(words):
             if w == s:
                 bag[i] = 1
+
     return np.array(bag)
 
 def predict(sentence):
     bag = bagOfWords(sentence)
     res = model.predict(np.array([bag]))[0]
-    results = [[i,r] for i,r in enumerate(res) if r>0.25]
+    results = [[i, r] for i, r in enumerate(res) if r > 0.25]
 
     results.sort(key=lambda x: x[1], reverse=True)
     return_list = []
-    for r in results:
-        return_list.append({"intent": classes[r[0]], "probability": str(r[1])})
+    for result in results:
+        return_list.append({"intent": classes[result[0]], "probability": str(result[1])})
 
     return return_list
 
@@ -55,9 +62,9 @@ def response(intents_list, intents_json):
 print("CovidBOT is active")
 
 while True:
-    sentence = input("You: ")
+    sentence = input("You:\t")
     results = predict(sentence)
     resp = response(results, intents)
-    print("CovidBOT: ", random.choice(resp["responses"]))
+    print("CovidBOT:\t", random.choice(resp["responses"]))
     if resp["tag"] == "goodbye":
         break

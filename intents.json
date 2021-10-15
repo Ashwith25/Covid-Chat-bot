@@ -12,7 +12,7 @@
         },
         {
             "tag": "name",
-            "patterns": ["What is you name ?", "What should I call you?"],
+            "patterns": ["What is your name ?", "What should I call you?"],
             "responses": ["My name is CovidBOT"]
         },
         {
@@ -33,12 +33,12 @@
         {
             "tag": "time",
             "patterns": ["What time is it?", "What is the time?"],
-            "responses": ["The time is: "]
+            "responses": ["The time is "]
         },
         {
             "tag": "date",
             "patterns": ["What date is it?", "What date is today?"],
-            "responses": ["Today is: "]
+            "responses": ["Today is "]
         }
     ]
 }
