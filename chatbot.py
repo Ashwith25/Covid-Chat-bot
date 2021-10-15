@@ -17,29 +17,36 @@ classes = pickle.load(open('classes.pkl', 'rb'))
 model = load_model('chatbot_model.h5')
 
 def cleanSentence(sentence):
+    '''
+    Cleans the sentence of punctuation and lemmatizes the words
+    '''
     sentence = sentence.lower()
     sentence = nltk.word_tokenize(sentence)
     sentence = [lemmatizer.lemmatize(word) for word in sentence]
     return sentence
 
 def bagOfWords(sentence):
+    '''
+    Creates a bag of words from the sentence    
+    '''
     sentence = cleanSentence(sentence)
     bag = [0]*len(words)
     for s in sentence:
         for i,w in enumerate(words):
             if w == s:
                 bag[i] = 1
+
     return np.array(bag)
 
 def predict(sentence):
     bag = bagOfWords(sentence)
     res = model.predict(np.array([bag]))[0]
-    results = [[i,r] for i,r in enumerate(res) if r>0.25]
+    results = [[i, r] for i, r in enumerate(res) if r > 0.25]
 
     results.sort(key=lambda x: x[1], reverse=True)
     return_list = []
-    for r in results:
-        return_list.append({"intent": classes[r[0]], "probability": str(r[1])})
+    for result in results:
+        return_list.append({"intent": classes[result[0]], "probability": str(result[1])})
 
     return return_list
 
@@ -61,7 +68,9 @@ while True:
     resp = response(results, intents)
     reply = random.choice(resp["responses"])
     if resp['tag'] == "time":
-        reply += str(datetime.now())
+        reply += str(datetime.now().strftime("%X"))
+    elif resp['tag'] == "date":
+        reply += str(datetime.now().strftime("%d %b, %Y"))
     print("CovidBOT: ", reply)
     if resp["tag"] == "goodbye":
         break
