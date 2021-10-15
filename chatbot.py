@@ -2,6 +2,7 @@ import random
 import json
 import pickle
 import numpy as np
+from datetime import datetime
 
 import nltk
 from nltk.stem import WordNetLemmatizer
@@ -58,6 +59,9 @@ while True:
     sentence = input("You: ")
     results = predict(sentence)
     resp = response(results, intents)
-    print("CovidBOT: ", random.choice(resp["responses"]))
+    reply = random.choice(resp["responses"])
+    if resp['tag'] == "time":
+        reply += str(datetime.now())
+    print("CovidBOT: ", reply)
     if resp["tag"] == "goodbye":
         break
