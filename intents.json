@@ -1,0 +1,44 @@
+{
+    "intents":[
+        {
+            "tag": "greetings",
+            "patterns": ["Hello", "Heya", "Hi", "what's up?", "hola"],
+            "responses": ["Hello", "Heya", "Hi", "What can I do for you?"]
+        },
+        {
+            "tag": "goodbye",
+            "patterns": ["Bye", "See you later", "Goodbye", "Bye bye"],
+            "responses": ["Bubye", "Goodbye!", "Have a great day"]
+        },
+        {
+            "tag": "name",
+            "patterns": ["What is you name ?", "What should I call you?"],
+            "responses": ["My name is CovidBOT"]
+        },
+        {
+            "tag": "age",
+            "patterns": ["How old are you?", "How old are you?"],
+            "responses": ["I am a bot, I don't have an age"]
+        },
+        {
+            "tag": "location",
+            "patterns": ["Where are you from?", "Where do you live?"],
+            "responses": ["I am from India"]
+        },
+        {
+            "tag": "job",
+            "patterns": ["What is your job?", "What do you do?", "What can you do?"],
+            "responses": ["I can update you regarding the COVID status of India"]
+        },
+        {
+            "tag": "time",
+            "patterns": ["What time is it?", "What is the time?"],
+            "responses": ["The time is: "]
+        },
+        {
+            "tag": "date",
+            "patterns": ["What date is it?", "What date is today?"],
+            "responses": ["Today is: "]
+        }
+    ]
+}
