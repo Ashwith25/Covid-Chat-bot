@@ -3,6 +3,7 @@ import json
 import pickle
 import numpy as np
 from datetime import datetime
+import requests
 
 import nltk
 from nltk.stem import WordNetLemmatizer
@@ -62,6 +63,23 @@ def response(intents_list, intents_json):
 
 print("CovidBOT is active")
 
+def covid_info(state_name):
+    res = requests.get("https://api.rootnet.in/covid19-in/stats/latest")
+    data = res.json()
+    all_states = data["data"]["regional"]
+    # print("inside function----------")
+    for state in all_states:
+        if state["loc"].lower() == state_name.lower():
+            return state
+
+def extract_stateName(sentence):
+    for i in sentence.split():
+        for j in statesList:
+            if i.capitalize() in j.split():
+                return j
+
+statesList = ["Andhra Pradesh", "Arunachal Pradesh", "Assam", "Bihar", "Chhattisgarh", "Goa", "Gujarat", "Haryana", "Himachal pradesh", "Jammu and Kashmir", "Jharkhand", "Karnataka", "Kerala", "Madhya Pradesh", "Maharashtra", "Manipur", "Meghalaya", "Mizoram", "Nagaland", "Odisha", "Punjab", "Rajasthan", "Sikkim", "Tamil Nadu", "Telangana", "Tripura", "Uttar Pradesh", "Uttarakhand", "West Bengal", "Andaman and Nicobar Islands", "Chandigarh", "Dadra and Nagar Haveli and Daman and Diu", "Delhi", "Lakshadweep", "Puducherry"]
+
 while True:
     sentence = input("You: ")
     results = predict(sentence)
@@ -71,6 +89,15 @@ while True:
         reply += str(datetime.now().strftime("%X"))
     elif resp['tag'] == "date":
         reply += str(datetime.now().strftime("%d %b, %Y"))
+    elif resp['tag'] == "covid":
+        stateName = extract_stateName(sentence)
+        state = covid_info(stateName)
+        reply1 = '''
+        Total Confirmed Cases: {},
+        Total Deaths: {}'''.format(state["totalConfirmed"], state["deaths"])
+        reply += stateName + ":" + reply1 
     print("CovidBOT: ", reply)
     if resp["tag"] == "goodbye":
         break
+
+

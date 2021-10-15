@@ -39,6 +39,11 @@
             "tag": "date",
             "patterns": ["What date is it?", "What date is today?"],
             "responses": ["Today is "]
+        },
+        {
+            "tag": "covid",
+            "patterns": ["What is the covid stats of ", "Give me the stats of ", "Brief me regarding stats of "],
+            "responses": ["The stats of "]
         }
     ]
 }
