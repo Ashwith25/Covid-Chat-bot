@@ -44,6 +44,11 @@
             "tag": "covid",
             "patterns": ["What is the covid stats of ", "Give me the stats of ", "Brief me regarding stats of "],
             "responses": ["The stats of "]
+        },
+        {
+            "tag": "vaccination",
+            "patterns": ["Give me the vaccination slots of "],
+            "responses": ["The vaccination slots of "]
         }
     ]
 }
