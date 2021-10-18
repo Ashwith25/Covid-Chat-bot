@@ -5,6 +5,7 @@ import numpy as np
 from datetime import datetime
 import requests
 import re
+import geocoder
 
 import nltk
 from nltk.stem import WordNetLemmatizer
@@ -86,7 +87,7 @@ def extract_stateName(sentence):
 #         date_output = datetime.strftime(date.group(),'%d-%m-%Y').date()
 #         return i, date_output
 
-def vaccination(pincode, date):
+def vaccination_by_pincode(pincode, date):
     api = "https://cdn-api.co-vin.in/api/v2/appointment/sessions/public/findByPin?pincode={}&date={}".format(pincode, date)
     response = requests.get(api)
     output = ''
@@ -113,6 +114,28 @@ def vaccination(pincode, date):
             break
     return output
 
+g = geocoder.ip('me')
+latitude, longitude = g.latlng
+
+def vaccination_by_lat_long(latitude, longitude):
+    api = "https://cdn-api.co-vin.in/api/v2/appointment/centers/public/findByLatLong?lat={}&long={}".format(latitude, longitude)
+    response = requests.get(api)
+    output = ''
+    data = response.json()['centers']
+    for area in data:
+        output+="\n"+"*"*30 + "Hospital Name: " + area['name'] + "*"*30 +"\n"
+        output+=''' 
+        Name = {}
+        Pincode: {}
+        State Name: {}
+        District Name: {}
+        Location = {}
+        Block Name = {}
+        Latitude = {}
+        Longitude = {}
+        '''.format(area['name'], area['pincode'], area['state_name'], area['district_name'], area['location'], area['block_name'], area['lat'], area['long'])
+    return output
+
 statesList = ["Andhra Pradesh", "Arunachal Pradesh", "Assam", "Bihar", "Chhattisgarh", "Goa", "Gujarat", "Haryana", "Himachal pradesh", "Jammu and Kashmir", "Jharkhand", "Karnataka", "Kerala", "Madhya Pradesh", "Maharashtra", "Manipur", "Meghalaya", "Mizoram", "Nagaland", "Odisha", "Punjab", "Rajasthan", "Sikkim", "Tamil Nadu", "Telangana", "Tripura", "Uttar Pradesh", "Uttarakhand", "West Bengal", "Andaman and Nicobar Islands", "Chandigarh", "Dadra and Nagar Haveli and Daman and Diu", "Delhi", "Lakshadweep", "Puducherry"]
 
 while True:
@@ -131,11 +154,14 @@ while True:
         Total Confirmed Cases: {},
         Total Deaths: {}'''.format(state["totalConfirmed"], state["deaths"])
         reply += stateName + ":" + reply1 
-    elif resp['tag'] == "vaccination":
+    elif resp['tag'] == "vaccination_by_pincode":
         pincode = int(input("Pincode: "))
         date = input("Date: ")
-        reply2 = vaccination(pincode, date)
+        reply2 = vaccination_by_pincode(pincode, date)
         reply += str(pincode) + " on " + date + ":" + reply2 
+    elif resp['tag'] == "vaccination_by_lat_long":
+        reply3 = vaccination_by_lat_long(latitude, longitude)
+        reply += reply3
     print("CovidBOT: ", reply)
     if resp["tag"] == "goodbye":
         break

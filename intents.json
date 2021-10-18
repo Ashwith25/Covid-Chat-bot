@@ -46,9 +46,14 @@
             "responses": ["The stats of "]
         },
         {
-            "tag": "vaccination",
+            "tag": "vaccination_by_pincode",
             "patterns": ["Give me the vaccination slots of "],
             "responses": ["The vaccination slots of "]
+        },
+        {
+           "tag": "vaccination_by_lat_long",
+           "patterns": ["Give me the vaccination slots of my place"],
+           "responses": ["The vaccination slots of your place: "]
         }
     ]
 }
