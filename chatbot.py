@@ -89,11 +89,11 @@ def extract_stateName(sentence):
 def vaccination(pincode, date):
     api = "https://cdn-api.co-vin.in/api/v2/appointment/sessions/public/findByPin?pincode={}&date={}".format(pincode, date)
     response = requests.get(api)
+    output = ''
     data = response.json()['sessions']
-    output = "\n"+"*"*30
     for area in data:
         if area['available_capacity'] > 0:
-            output+="Hospital Name:" + area['name'] + "*"*30 +"\n".center(20)
+            output+="\n"+"*"*30 + "Hospital Name: " + area['name'] + "*"*30 +"\n"
             output+=''' 
             Address: {}
             Pincode: {}
