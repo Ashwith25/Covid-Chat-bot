@@ -28,7 +28,7 @@
         {
             "tag": "job",
             "patterns": ["What is your job?", "What do you do?"],
-            "responses": ["\n1. I can give you details of the COVID-19 of your location\n2. I can provide you the availability of vaccine\n3. I am also capable of giving you the list of vaccine centres nearby you"]
+            "responses": ["1. I can give you details of the COVID-19 of your location\n2. I can provide you the availability of vaccine\n3. I am also capable of giving you the list of vaccine centres nearby you"]
         },
         {
             "tag": "time",
@@ -53,7 +53,7 @@
         {
            "tag": "vaccination_by_lat_long",
            "patterns": ["Give me the vaccination centres of my location", "Provide me the vaccination centres near me", "Give me the list of all centres in my vicinity"],
-           "responses": ["The vaccination slots of your place: "]
+           "responses": ["The vaccination centres near you are, \n"]
         }
     ]
 }

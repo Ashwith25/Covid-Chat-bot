@@ -96,7 +96,7 @@ def vaccination_by_pincode(pincode, date):
     count = 0
     for area in data:
         if area['available_capacity'] > 0:
-            output+="\n"+"*"*30 + ">>> Hospital Name: " + area['name'] + " <<<"+ "*"*30 +"\n"
+            output+="\n" + ">>> Hospital Name: ".upper() + area['name'].upper() + " <<<" +"\n"
             output+=''' 
             Address: {}
             Pincode: {}
@@ -129,52 +129,62 @@ def vaccination_by_lat_long(latitude, longitude):
     data = response.json()['centers']
     for area in data:
         # output+="\n"+"*"*30 + "Hospital Name: " + area['name'] + "*"*30 +"\n"
-        output+="\n"+"*"*30 + ">>> Hospital Name: " + area['name'] + " <<<"+ "*"*30 +"\n"
+        output+="\n"+">>> Hospital Name: ".upper() + area['name'].upper() + " <<<"+"\n"
         output+=''' 
-        Name = {}
+        Name: {}
         Pincode: {}
         State Name: {}
         District Name: {}
-        Location = {}
-        Block Name = {}
-        Latitude = {}
-        Longitude = {}
+        Location: {}
+        Block Name: {}
+        Latitude: {}
+        Longitude: {}
         '''.format(area['name'], area['pincode'], area['state_name'], area['district_name'], area['location'], area['block_name'], area['lat'], area['long'])
     return output
 
 statesList = ["Andhra Pradesh", "Arunachal Pradesh", "Assam", "Bihar", "Chhattisgarh", "Goa", "Gujarat", "Haryana", "Himachal pradesh", "Jammu and Kashmir", "Jharkhand", "Karnataka", "Kerala", "Madhya Pradesh", "Maharashtra", "Manipur", "Meghalaya", "Mizoram", "Nagaland", "Odisha", "Punjab", "Rajasthan", "Sikkim", "Tamil Nadu", "Telangana", "Tripura", "Uttar Pradesh", "Uttarakhand", "West Bengal", "Andaman and Nicobar Islands", "Chandigarh", "Dadra and Nagar Haveli and Daman and Diu", "Delhi", "Lakshadweep", "Puducherry"]
 
-while True:
-    sentence = input("You: ")
+
+def startApp(sentence):
+
+
+# while True:
+    # sentence = input("You: ")
     results = predict(sentence)
     resp = response(results, intents)
-    reply = random.choice(resp["responses"])
-    if resp['tag'] == "time":
-        reply += str(datetime.now().strftime("%X"))
-    elif resp['tag'] == "date":
-        reply += str(datetime.now().strftime("%d %b, %Y"))
-    elif resp['tag'] == "covid":
-        stateName = extract_stateName(sentence)
-        state = covid_info(stateName)
-        reply1 = '''
-        Total Confirmed Cases: {},
-        Total Deaths: {}'''.format(state["totalConfirmed"], state["deaths"])
-        reply += stateName + ":" + reply1 
-    elif resp['tag'] == "vaccination_by_pincode":
-        try:
-            pincode = int(input("Pincode: "))
-            date = input("Date: ")
-            reply2 = vaccination_by_pincode(pincode, date)
-            reply += reply2
-        except:
-            reply = "Enter proper details"
-        
-    elif resp['tag'] == "vaccination_by_lat_long":
-        try:
-            reply3 = vaccination_by_lat_long(latitude, longitude)
-            reply += reply3
-        except:
-            reply = "Enter proper details"
-    print("CovidBOT: ", reply)
-    if resp["tag"] == "goodbye":
-        break
+    print(results)
+    if float(results[0]["probability"]) < 0.75 and resp['tag'] != "vaccination_by_pincode":
+        reply = "Unable to detect, Please try again"
+    else:
+        reply = random.choice(resp["responses"])
+        if resp['tag'] == "time":
+            reply += str(datetime.now().strftime("%X"))
+        elif resp['tag'] == "date":
+            reply += str(datetime.now().strftime("%d %b, %Y"))
+        elif resp['tag'] == "covid":
+            stateName = extract_stateName(sentence)
+            state = covid_info(stateName)
+            reply1 = '''
+            Total Confirmed Cases: {},
+            Total Deaths: {}'''.format(state["totalConfirmed"], state["deaths"])
+            reply += stateName + ":" + reply1 
+        elif resp['tag'] == "vaccination_by_pincode":
+            reply = "Enter space-separated pincode and date(dd-mm-yyyy)"
+            # try:
+            #     pincode = int(input("Pincode: "))
+            #     date = input("Date: ")
+            #     reply2 = vaccination_by_pincode(pincode, date)
+            #     reply += reply2
+            # except:
+            #     reply = "Enter proper details"
+            
+        elif resp['tag'] == "vaccination_by_lat_long":
+            try:
+                reply3 = vaccination_by_lat_long(latitude, longitude)
+                reply += reply3
+            except:
+                reply = "Enter proper details"
+    # print("CovidBOT: ", reply)
+    return (reply, resp['tag'])
+    # if resp["tag"] == "goodbye":
+    #     break
