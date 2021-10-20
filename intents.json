@@ -7,8 +7,8 @@
         },
         {
             "tag": "goodbye",
-            "patterns": ["Bye", "See you later", "Goodbye", "Bye bye"],
-            "responses": ["Bubye", "Goodbye!", "Have a great day"]
+            "patterns": ["Bye", "See you later", "Goodbye", "Bye bye", "Tata"],
+            "responses": ["Bubye", "Goodbye!", "Have a great day", "Tata"]
         },
         {
             "tag": "name",
@@ -27,8 +27,8 @@
         },
         {
             "tag": "job",
-            "patterns": ["What is your job?", "What do you do?", "What can you do?"],
-            "responses": ["I can update you regarding the COVID status of India"]
+            "patterns": ["What is your job?", "What do you do?"],
+            "responses": ["\n1. I can give you details of the COVID-19 of your location\n2. I can provide you the availability of vaccine\n3. I am also capable of giving you the list of vaccine centres nearby you"]
         },
         {
             "tag": "time",
@@ -47,12 +47,12 @@
         },
         {
             "tag": "vaccination_by_pincode",
-            "patterns": ["Give me the vaccination slots of "],
-            "responses": ["The vaccination slots of "]
+            "patterns": ["Give me the vaccination slots of ", "what is the vaccine availability of "],
+            "responses": [""]
         },
         {
            "tag": "vaccination_by_lat_long",
-           "patterns": ["Give me the vaccination slots of my place"],
+           "patterns": ["Give me the vaccination centres of my location", "Provide me the vaccination centres near me", "Give me the list of all centres in my vicinity"],
            "responses": ["The vaccination slots of your place: "]
         }
     ]

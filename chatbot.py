@@ -6,6 +6,7 @@ from datetime import datetime
 import requests
 import re
 import geocoder
+import re
 
 import nltk
 from nltk.stem import WordNetLemmatizer
@@ -77,7 +78,7 @@ def covid_info(state_name):
 def extract_stateName(sentence):
     for i in sentence.split():
         for j in statesList:
-            if i.capitalize() in j.split():
+            if re.sub('[^A-Za-z ]+', '', i.capitalize()) in j.split():
                 return j
 
 # def extract_pincode_date(sentence):
@@ -90,11 +91,12 @@ def extract_stateName(sentence):
 def vaccination_by_pincode(pincode, date):
     api = "https://cdn-api.co-vin.in/api/v2/appointment/sessions/public/findByPin?pincode={}&date={}".format(pincode, date)
     response = requests.get(api)
-    output = ''
+    output = "The vaccination slots of " + str(pincode) + " on " + date + ":"
     data = response.json()['sessions']
+    count = 0
     for area in data:
         if area['available_capacity'] > 0:
-            output+="\n"+"*"*30 + "Hospital Name: " + area['name'] + "*"*30 +"\n"
+            output+="\n"+"*"*30 + ">>> Hospital Name: " + area['name'] + " <<<"+ "*"*30 +"\n"
             output+=''' 
             Address: {}
             Pincode: {}
@@ -102,16 +104,19 @@ def vaccination_by_pincode(pincode, date):
             District Name: {}
             Fee Type: {}
             Fee: {}
-            available_capacity_dose1: {}
-            available_capacity_dose2: {}
-            available_capacity: {}
-            min_age_limit: {}
-            vaccine: {}
+            Available capacity for Dose 1: {}
+            Available capacity for Dose 2: {}
+            Available capacity: {}
+            Minimum age limit: {}
+            Vaccine: {}
             Time Slots: {}
             '''.format(area['address'], area['pincode'], area['state_name'], area['district_name'], area['fee_type'], area['fee'], area['available_capacity_dose1'], area['available_capacity_dose2'], area['available_capacity'], area['min_age_limit'], area['vaccine'], str(area['slots'])[1:-1])
-        elif area['available_capacity'] < 0:
-            print("Currently no slots available for this area!")
-            break
+        else:
+            count+=1
+
+    if count == len(data):
+        output = "There are currently no slots available for this area!"
+
     return output
 
 g = geocoder.ip('me')
@@ -123,7 +128,8 @@ def vaccination_by_lat_long(latitude, longitude):
     output = ''
     data = response.json()['centers']
     for area in data:
-        output+="\n"+"*"*30 + "Hospital Name: " + area['name'] + "*"*30 +"\n"
+        # output+="\n"+"*"*30 + "Hospital Name: " + area['name'] + "*"*30 +"\n"
+        output+="\n"+"*"*30 + ">>> Hospital Name: " + area['name'] + " <<<"+ "*"*30 +"\n"
         output+=''' 
         Name = {}
         Pincode: {}
@@ -155,15 +161,20 @@ while True:
         Total Deaths: {}'''.format(state["totalConfirmed"], state["deaths"])
         reply += stateName + ":" + reply1 
     elif resp['tag'] == "vaccination_by_pincode":
-        pincode = int(input("Pincode: "))
-        date = input("Date: ")
-        reply2 = vaccination_by_pincode(pincode, date)
-        reply += str(pincode) + " on " + date + ":" + reply2 
+        try:
+            pincode = int(input("Pincode: "))
+            date = input("Date: ")
+            reply2 = vaccination_by_pincode(pincode, date)
+            reply += reply2
+        except:
+            reply = "Enter proper details"
+        
     elif resp['tag'] == "vaccination_by_lat_long":
-        reply3 = vaccination_by_lat_long(latitude, longitude)
-        reply += reply3
+        try:
+            reply3 = vaccination_by_lat_long(latitude, longitude)
+            reply += reply3
+        except:
+            reply = "Enter proper details"
     print("CovidBOT: ", reply)
     if resp["tag"] == "goodbye":
         break
-
-
