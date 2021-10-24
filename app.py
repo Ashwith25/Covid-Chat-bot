@@ -76,7 +76,7 @@ class ChatApplication:
         current_time = now.strftime("%D - %H:%M \n")
 
         self.text_widget.config(state=NORMAL)
-        self.text_widget.insert(END, "You: " + current_time + ' ', ("small", "right", "greycolour"))
+        self.text_widget.insert(END, "You: " + current_time + ' ', ("small", "right", "greycolour"),)
         self.text_widget.window_create(END, window=Label(self.text_widget, fg="#000000", text=msg, 
         wraplength=300, font=("Arial", 10), bg="lightblue", bd=10, justify="left"))
         self.text_widget.insert(END,'\n ', "left")
