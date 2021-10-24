@@ -1,7 +1,9 @@
 from textwrap import fill
+import tkinter as tk
 from tkinter import *
 from chatbot import startApp, vaccination_by_pincode
 from datetime import datetime
+import time
 
 BG_GRAY = "#ABB2B9"
 BG_COLOR = "#17202A"
@@ -88,8 +90,8 @@ class ChatApplication:
         if not self.forLocation: res, tag = startApp(msg)
 
         if self.forLocation:
-            pincode, date = msg.split(" ")
             try:
+                pincode, date = msg.split(" ")
                 res = vaccination_by_pincode(pincode, date)
                 self.forLocation = False
             except:
@@ -114,17 +116,10 @@ class ChatApplication:
         self.text_widget.yview(END)
         
         self.msg_entry.delete(0, END)
-        # msg1 = f"{sender}: {msg}\n\n"
-        # self.text_widget.configure(state=NORMAL)
-        # self.text_widget.insert(END, msg1, "right")
-        # self.text_widget.configure(state=DISABLED)
-        
-        # msg2 = f"CovidBOT: {startApp(msg)}\n\n"
-        # self.text_widget.configure(state=NORMAL)
-        # self.text_widget.insert(END, msg2, "left")
-        # self.text_widget.configure(state=DISABLED)
-        
-        # self.text_widget.see(END)
+
+        if tag == "goodbye":
+            time.sleep(5)
+            self.window.destroy()
              
         
 if __name__ == "__main__":
