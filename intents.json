@@ -57,12 +57,12 @@
         },
         {
             "tag": "symptoms",
-            "patterns":["what are the symptoms of covid19?", "Tell me the symptoms of covid19?"],
+            "patterns":["what are the symptoms", "Tell me the symptoms", "What are the possible symptoms"],
             "responses":["1. Most common symptoms: fever, cough, tiredness, loss of taste or smell\n2. Least common symptoms: sore throat, headache, aches and pains, diarrhoeaa, rash on skin, discolouration of fingers or toes, red or irritated eyes\n3. Serious symptoms: difficulty breathing or shortness of breath, loss of speech or mobility, or confusion, chest pain"]
         },
         {
             "tag": "precautions",
-            "patterns":["precautions of covid19"],
+            "patterns":["What care should I take", "How to avoid", "What are the precautions", "What shall I do to avoid Covid", "What are the good practices"],
             "responses":["1. Wash your hands thoroughly with soap and warm water or with an alcohol-based hand sanitizer\n2. Wear masks when going outside\n3. Take hot shower or steamy shower to relieve sore scratchy throat and cough\n4. Keep your hands and fingers away from your eyes, nose, and mouth\n5. Setup humidifier in your home\n6. Drink plenty of fluids\n7. Avoid close contact with people who are infected\n8. Consume only thoroughly cooked food and meat\n9. Avoid close contact those who are displaying symptoms\n10. Avoid direct contact with live animals\n11. Cover your mouth when coughing or sneezing\n12. Contact doctor if symptoms persist"]
         }
     ]

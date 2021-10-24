@@ -118,7 +118,7 @@ class ChatApplication:
         self.msg_entry.delete(0, END)
 
         if tag == "goodbye":
-            time.sleep(5)
+            time.sleep(1)
             self.window.destroy()
              
         
